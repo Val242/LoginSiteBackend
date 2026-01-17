@@ -4,93 +4,26 @@
     <title>Register</title>
     <style>
         /* Reset & font */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            background-color: #fff;
-            padding: 40px 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            width: 350px;
-            text-align: center;
-        }
-
-        h1 {
-            margin-bottom: 25px;
-            color: #333;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 15px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #2575fc;
-            box-shadow: 0 0 5px rgba(37, 117, 252, 0.5);
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #2575fc;
-            border: none;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #6a11cb;
-        }
-
-        #message {
-            margin-top: 15px;
-            font-size: 14px;
-            color: red;
-        }
-
-        a {
-            display: block;
-            margin-top: 15px;
-            color: #2575fc;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #6a11cb, #2575fc); height: 100vh; display: flex; justify-content: center; align-items: center; }
+        .container { background-color: #fff; padding: 40px 30px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); width: 350px; text-align: center; }
+        h1 { margin-bottom: 25px; color: #333; }
+        input { width: 100%; padding: 12px 15px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
+        input:focus { outline: none; border-color: #2575fc; box-shadow: 0 0 5px rgba(37, 117, 252, 0.5); }
+        button { width: 100%; padding: 12px; background-color: #2575fc; border: none; color: white; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 15px; transition: background-color 0.3s ease; }
+        button:hover { background-color: #6a11cb; }
+        #message { margin-top: 15px; font-size: 14px; color: green; }
+        a { display: block; margin-top: 15px; color: #2575fc; text-decoration: none; }
+        a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Create Account</h1>
-        <form id="registerForm">
-            <input type="text" name="name" placeholder="Name" required />
-            <input type="email" name="email" placeholder="Email" required />
-            <input type="password" name="password" placeholder="Password" required />
+        <form id="registerForm" autocomplete="on">
+            <input type="text" name="name" placeholder="Name" required autocomplete="name" />
+            <input type="email" name="email" placeholder="Email" required autocomplete="email" />
+            <input type="password" name="password" placeholder="Password" required autocomplete="new-password" />
             <button type="submit">Register</button>
         </form>
         <p id="message"></p>
@@ -101,7 +34,6 @@
         const form = document.getElementById('registerForm');
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-
             const name = form.name.value;
             const email = form.email.value;
             const password = form.password.value;
@@ -112,14 +44,8 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, email, password })
                 });
-
                 const data = await response.json();
-                if (response.ok) {
-                    document.getElementById('message').innerText = "Registration successful!";
-                    form.reset();
-                } else {
-                    document.getElementById('message').innerText = data.message || "Error occurred";
-                }
+                document.getElementById('message').innerText = response.ok ? "Registration successful!" : (data.message || "Error occurred");
             } catch (err) {
                 document.getElementById('message').innerText = "Server error";
             }
