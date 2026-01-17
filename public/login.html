@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form id="loginForm">
+        <input type="email" name="email" placeholder="Email" required /><br/>
+        <input type="password" name="password" placeholder="Password" required /><br/>
+        <button type="submit">Login</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = form.email.value;
+            const password = form.password.value;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('message').innerText = "Login successful!";
+                    form.reset();
+                } else {
+                    document.getElementById('message').innerText = data.message || "Invalid credentials";
+                }
+            } catch (err) {
+                document.getElementById('message').innerText = "Server error";
+            }
+        });
+    </script>
+</body>
+</html>
