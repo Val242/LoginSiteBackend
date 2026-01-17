@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard-container {
+            background-color: #fff;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: #2575fc;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #6a11cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Welcome!</h1>
+        <p id="userInfo">Loading user info...</p>
+        <button id="logoutBtn">Logout</button>
+    </div>
+
+    <script>
+        // Check if user info is in localStorage
+        const user = JSON.parse(localStorage.getItem('user'));
+        const userInfo = document.getElementById('userInfo');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        if (user) {
+            userInfo.innerText = `Logged in as: ${user.username} (${user.email})`;
+        } else {
+            // If no user info, redirect to login
+            window.location.href = 'login.html';
+        }
+
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/logout', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    localStorage.removeItem('user');
+                    window.location.href = 'login.html';
+                }
+            } catch (err) {
+                alert('Logout failed');
+            }
+        });
+    </script>
+</body>
+</html>
